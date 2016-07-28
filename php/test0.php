@@ -89,7 +89,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>php练习</title>
+    <title>php基础练习</title>
 </head>
 <body>
 
