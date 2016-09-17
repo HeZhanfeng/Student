@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS练习</title>
+    <!-- 
+        外部js文件这样引用：<script src="myScript.js"></script>
+     -->
+    <script type="text/javascript">
+
+        function myFunction(){
+            x = document.getElementById("demo");//找到元素
+            x.innerHTML = "Hello Javascript!";//改变内容
+        }
+
+        function changeImage(){
+            element = document.getElementById('myimage');
+            if (element.src.match("bulbon")) {
+                element.src="/images/pic_bulboff.gif";
+            } 
+            else
+            {
+                element.src="/images/pic_bulbon.gif";
+            }
+        }
+
+        function changeBackground_night(){
+            a = document.getElementById("background");
+            a.style.background="#D8DDE3";
+        }
+
+        function changeBackground_morning(){
+            a = document.getElementById("background");
+            a.style.background="#fff";//改变属性
+        }
+    </script>
+
+
+</head>
+<body id="background">
+    <img id="myimage" src="/images/pic_bulboff.gif" onclick="changeImage()" width="100px" height="180">
+    <p id="demo">Hello World!</p>
+    <button type="button" onclick="myFunction()">点击这里</button>
+    <button type="button" onclick="changeBackground_night()">夜间模式</button>
+    <button type="button" onclick="changeBackground_morning()">白天模式</button>
+</body>
+</html>

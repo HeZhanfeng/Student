@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三级联动选择地区</title>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        var xmldom = null;//声明一个全局变量，用于存储第一次请求回来的xml信息
+        //页面加载完成后显示省份
+        $(document).ready(function (){
+            //1、ajax去服务器把xml的地区信息都给请求回来；
+            //2、从中筛选省份信息并显示；
+            $('#area').empty();
+            $('#area').append('<option value="0">-请选择-</option>');
+            $.get('./ChinaArea.xml',function(msg){
+                xmldom = msg;//将请求回来的msg赋给xmldom。
+                //对服务器返回的xml信息进行处理
+                //需要在返回xml的XMLDocument节点里获得province元素节点（province是XMLDocument的子节点 ）
+                //从父节点获得内部子节点 $(父节点).find(子节点选择器)
+                //each遍历
+                $(msg).find('province').each(function(k,v){
+                    //this分别依次代表每个province的dom对象
+                    //获得省份的名称并显示给下拉列表
+                    var nm = $(this).attr('province');
+                    //获得省份编号
+                    var id = $(this).attr('provinceID');
+                    //给select框追加省份名称
+                    $('#province').append("<option value='"+id+"'>"+nm+"</option>");
+                });
+            },'xml');
+        });
+        //显示城市
+        function show_city(){
+            //1、获得选取省份的id信息
+            var pid = $('#province option:selected').val();
+            var two_pid = pid.substr(0,2);//截取id信息的前两位。
+            //console.log(two_pid);
+            //2、获得选取省份下的城市信息
+            //限制条件：City标签和本身id的前两位与省份id的前两位一致。
+            $('#city').empty();//清除旧节点
+            $('#city').append('<option value="0">-请选择-</option>');//追加-请选择-
+            $('#area').empty();
+            $('#area').append('<option value="0">-请选择-</option>');
+            //遍历城市信息，并显示到页面
+            $(xmldom).find('City[CityID^='+two_pid+']').each(function(){
+                //this分别依次代表每个City节点的dom对象
+                var nm = $(this).attr('City');//选取City属性
+                //console.log(nm);
+                var id = $(this).attr('CityID');
+                //console.log(id);
+                //把nm与option结合显示到页面上
+                $('#city').append("<option value='"+id+"'>"+nm+"</option>");
+            });
+        }
+        //显示地区
+        function show_area(){
+            //获取城市的id信息
+            var cid = $('#city option:selected').val();
+            var two_cid = cid.substr(0,4);
+            //console.log(two_cid);
+            $('#area').empty();
+            $('#area').append('<option value="0">-请选择-</option>');
+
+            $(xmldom).find('Piecearea[PieceareaID^='+two_cid+']').each(function(){
+                var nm = $(this).attr('Piecearea');
+
+                var id = $(this).attr('PieceareaID');
+                //console.log(id);
+                $('#area').append("<option value='"+id+"'>"+nm+"</option>");
+            
+            });
+
+        }
+    </script>
+</head>
+<body align="center">
+    <h3>中国地区选择器：</h3>
+    省份：
+    <select id="province"  onchange="show_city()">
+        <option value="0">--请选择--</option>    
+    </select>
+    城市：
+    <select id="city" onchange="show_area()">
+        <option value="0">--请选择--</option>    
+    </select>
+    地区：
+    <select id="area">
+        <option value="0">--请选择--</option>    
+    </select>
+</body>
+</html>

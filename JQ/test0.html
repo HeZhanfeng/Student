@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax练习</title>
+    <style type="text/css">
+        #return{
+            float: right;
+            padding-right: 1050px;
+            color:red;
+        }
+    </style>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        function f1(){
+            var name = document.getElementById('uname').value;
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    document.getElementById('return').innerHTML = xhr.responseText;
+                    //alert(xhr.responseText);
+
+                }
+            }
+
+            xhr.open('get','./test0.php?name='+name);
+
+            xhr.setRequestHeader("content-type","application/x-www-form-urlencode");
+
+            xhr.send(null);
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <span>用户名：<input id="uname" type="text" name="uname" onblur="f1()"/><div id="return"></div></span><br/>
+        密码:   <input id="paw" type="text"/>
+    </div>
+</body>
+</html>
